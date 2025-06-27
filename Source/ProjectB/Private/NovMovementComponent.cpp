@@ -47,3 +47,13 @@ void UNovMovementComponent::FSavedMove_Nov::PrepMoveFor(ACharacter* Character)
 
 	CharacterMovement->bWantsToWalk = bSavedWantsToWalk;
 }
+
+UNovMovementComponent::FNetworkPredictionData_Client_Nov::FNetworkPredictionData_Client_Nov(const UCharacterMovementComponent& ClientMovement)
+	: Super(ClientMovement)
+{
+}
+
+FSavedMovePtr UNovMovementComponent::FNetworkPredictionData_Client_Nov::AllocateNewMove()
+{
+	return FSavedMovePtr(new FSavedMove_Nov());
+}

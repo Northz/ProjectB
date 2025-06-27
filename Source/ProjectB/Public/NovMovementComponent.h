@@ -50,5 +50,16 @@ class PROJECTB_API UNovMovementComponent : public UCharacterMovementComponent
 		virtual void PrepMoveFor(ACharacter* Character) override;
 	};
 
+	// Indicates to the CMC that we will be using our custom FSavedMove_Nov
+	class FNetworkPredictionData_Client_Nov : public FNetworkPredictionData_Client_Character
+	{
+	public:
+		FNetworkPredictionData_Client_Nov(const UCharacterMovementComponent& ClientMovement);
+
+		typedef FNetworkPredictionData_Client_Character Super;
+
+		virtual FSavedMovePtr AllocateNewMove() override;
+	};
+
 	bool bWantsToWalk;
 };
