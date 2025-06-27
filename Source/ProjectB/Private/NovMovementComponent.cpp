@@ -51,9 +51,34 @@ void UNovMovementComponent::FSavedMove_Nov::PrepMoveFor(ACharacter* Character)
 UNovMovementComponent::FNetworkPredictionData_Client_Nov::FNetworkPredictionData_Client_Nov(const UCharacterMovementComponent& ClientMovement)
 	: Super(ClientMovement)
 {
+	// The above should be shorthand for:
+	// FNetworkPredictionData_Client_Character(ClientMovement);
 }
 
 FSavedMovePtr UNovMovementComponent::FNetworkPredictionData_Client_Nov::AllocateNewMove()
 {
+	// Heap allocation with new because our helpers
+	// are not inheriting from UObject
 	return FSavedMovePtr(new FSavedMove_Nov());
+}
+
+FNetworkPredictionData_Client* UNovMovementComponent::GetPredictionData_Client() const
+{
+	check(PawnOwner != nullptr)
+
+		if (ClientPredictionData == nullptr)
+		{
+			UNovMovementComponent* MutableThis = const_cast<UNovMovementComponent*>(this);
+
+			MutableThis->ClientPredictionData = new FNetworkPredictionData_Client_Nov(*this);
+			MutableThis->ClientPredictionData->MaxSmoothNetUpdateDist = 92.f;
+			MutableThis->ClientPredictionData->NoSmoothNetUpdateDist = 140.f;
+		}
+	return ClientPredictionData;
+}
+
+void UNovMovementComponent::UpdateFromCompressedFlags(uint8 Flags)
+{
+	Super::UpdateFromCompressedFlags(Flags);
+	bWantsToWalk = (Flags & FSavedMove_Character::FLAG_Custom_0) != 0;
 }

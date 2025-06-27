@@ -62,4 +62,11 @@ class PROJECTB_API UNovMovementComponent : public UCharacterMovementComponent
 	};
 
 	bool bWantsToWalk;
+
+public:
+	// const because this is a getter
+	virtual FNetworkPredictionData_Client* GetPredictionData_Client() const override;
+protected:
+	// pass flags and set our state based on these
+	virtual void UpdateFromCompressedFlags(uint8 Flags) override;
 };
