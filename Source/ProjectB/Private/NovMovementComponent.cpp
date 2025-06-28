@@ -82,3 +82,25 @@ void UNovMovementComponent::UpdateFromCompressedFlags(uint8 Flags)
 	Super::UpdateFromCompressedFlags(Flags);
 	bWantsToWalk = (Flags & FSavedMove_Character::FLAG_Custom_0) != 0;
 }
+
+void UNovMovementComponent::OnMovementUpdated(float DeltaSeconds, const FVector& OldLocation, const FVector& OldVelocity)
+{
+	Super::OnMovementUpdated(DeltaSeconds, OldLocation, OldVelocity);
+
+	if (MovementMode == MOVE_Walking)
+	{
+		if (bWantsToWalk)
+		{
+			MaxWalkSpeed = MaxWalkingSpeed;
+		}
+		else
+		{
+			MaxWalkSpeed = MaxRunningSpeed;
+		}
+	}
+}
+
+void UNovMovementComponent::ToggleWalk()
+{
+	bWantsToWalk = !bWantsToWalk;
+}

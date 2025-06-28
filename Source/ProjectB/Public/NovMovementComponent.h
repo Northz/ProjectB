@@ -26,7 +26,11 @@ class PROJECTB_API UNovMovementComponent : public UCharacterMovementComponent
 		// Checks current move and new move and tries to combine them
 		// i.e. when the saved data for two moves is the same
 		// saves bandwidth
-		virtual bool CanCombineWith(const FSavedMovePtr& NewMove, ACharacter* InCharacter, float MaxDelta) const override;
+		virtual bool CanCombineWith(
+			const FSavedMovePtr& NewMove, 
+			ACharacter* InCharacter, 
+			float MaxDelta
+		) const override;
 
 		// Resets the save move object to empty
 		virtual void Clear() override;
@@ -42,8 +46,9 @@ class PROJECTB_API UNovMovementComponent : public UCharacterMovementComponent
 		virtual void SetMoveFor(
 			ACharacter* Character, 
 			float InDeltaTime, 
-			FVector const& NewAccel,
-			FNetworkPredictionData_Client_Character& ClientData) override;
+			FVector const& NewAccel, 
+			FNetworkPredictionData_Client_Character& ClientData
+		) override;
 
 		// Takes the data from the set move and applies it to the current state
 		// basically the reverse of SetMoveFor.
@@ -61,6 +66,11 @@ class PROJECTB_API UNovMovementComponent : public UCharacterMovementComponent
 		virtual FSavedMovePtr AllocateNewMove() override;
 	};
 
+	UPROPERTY(EditDefaultsOnly)
+	float MaxRunningSpeed;
+	UPROPERTY(EditDefaultsOnly)
+	float MaxWalkingSpeed;
+
 	bool bWantsToWalk;
 
 public:
@@ -69,4 +79,17 @@ public:
 protected:
 	// pass flags and set our state based on these
 	virtual void UpdateFromCompressedFlags(uint8 Flags) override;
+
+	// This is automatically called at the end of every peform move,
+	// handles movement logic regardless of current movement mode
+	virtual void OnMovementUpdated(
+		float DeltaSeconds, 
+		const FVector& OldLocation, 
+		const FVector& OldVelocity
+	) override;
+
+// Blueprint-callable API
+public:
+	UFUNCTION(BlueprintCallable)
+	void ToggleWalk();
 };
