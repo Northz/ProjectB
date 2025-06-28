@@ -13,8 +13,11 @@
 #include "InputActionValue.h"
 
 // Sets default values
-ANovCharacter::ANovCharacter()
+ANovCharacter::ANovCharacter(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UNovMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
+	NovMovementComponent = Cast<UNovMovementComponent>(GetCharacterMovement());
+
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -70,7 +73,16 @@ void ANovCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	}
 	else
 	{
-		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+		UE_LOG(
+			LogTemplateCharacter, 
+			Error, 
+			TEXT(
+				"'%s' Failed to find an Enhanced Input component! "
+				"This template is built to use the Enhanced Input system. "
+				"If you intend to use the legacy system, then you will need to update this C++ file."
+			), 
+			*GetNameSafe(this)
+		);
 	}
 }
 

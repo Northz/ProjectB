@@ -44,9 +44,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	UInputAction* MouseLookAction;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement)
+	class UNovMovementComponent* NovMovementComponent;
+
 public:
 	// Sets default values for this character's properties
-	ANovCharacter();
+	ANovCharacter(const FObjectInitializer& ObjectInitializer);
 
 protected:
 	/** Initialize input action bindings */
@@ -83,4 +86,6 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE UNovMovementComponent* GetNovMovementComponent() const { return NovMovementComponent; }
 };
